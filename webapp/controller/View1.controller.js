@@ -96,8 +96,9 @@ sap.ui.define([
 				}
 
 				oDocUplModel.refresh();
+				
 				var oModel = that.getView().getModel();
-				var listA = oModel.getProperty("/listA");
+			//	var listA = oModel.getProperty("/listA");
 
 				//controllo per il secondo input della data (relativo a Marca da bollo). per leggere correttamente i dati
 				var dataMB = oModel.getProperty("/stamp_duty_date"); //chiamo la variabile
@@ -112,7 +113,6 @@ sap.ui.define([
 				//var docMancante = that.getView().getModel("i18n").getResourceBundle().getText("DocMancante");
 				oDataModel.read(sPath, {
 					"success": function (oDataResults) {
-
 						that.getView().byId("stampDuty").setVisible(oDataResults.StampDutyDocReq);
 					}.bind(that),
 					"error": function (err) {
