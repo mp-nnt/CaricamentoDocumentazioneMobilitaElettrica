@@ -78,49 +78,49 @@ sap.ui.define([
 
 			var that = this;
 
-			$(window).bind("load", function () {
+			//	$(window).bind("load", function () { commentando questa funziona si vedono i documenti già caricati
 
-				var oData = that.getView().getModel().getData();
-				var oDocUplModel = that.getView().getModel("uploadedDocument");
-				var oDocUplModelData = oDocUplModel.getData();
-				var attributesText = that.getView().getModel("i18n").getResourceBundle().getText("attachText");
-				var i;
-				var length = that.ArrayId.length;
+			var oData = that.getView().getModel().getData();
+			var oDocUplModel = that.getView().getModel("uploadedDocument");
+			var oDocUplModelData = oDocUplModel.getData();
+			var attributesText = that.getView().getModel("i18n").getResourceBundle().getText("attachText");
+			var i;
+			var length = that.ArrayId.length;
 
-				for (i = 0; i < length; i++) {
-					var property = oData[that.ArrayId[i]];
-					var rowType = that.getView().getModel("i18n").getResourceBundle().getText(that.ArrayId[i]);
-					for (var k in property) {
-						that._getDocRow(property[k], rowType, oDocUplModelData, attributesText);
-					}
+			for (i = 0; i < length; i++) {
+				var property = oData[that.ArrayId[i]];
+				var rowType = that.getView().getModel("i18n").getResourceBundle().getText(that.ArrayId[i]);
+				for (var k in property) {
+					that._getDocRow(property[k], rowType, oDocUplModelData, attributesText);
+				}
+			}
+
+			oDocUplModel.refresh();
+
+			var oModel = that.getView().getModel();
+			//	var listA = oModel.getProperty("/listA");
+
+			//controllo per il secondo input della data (relativo a Marca da bollo). per leggere correttamente i dati
+			var dataMB = oModel.getProperty("/stamp_duty_date"); //chiamo la variabile
+			dataMB = new Date(dataMB); //trasformazione da stringa ad oggetto
+			oModel.setProperty("/stamp_duty_date", dataMB); //set della propriety con la nuova variabile perchè non teneva in memoria il cambiamento
+			oModel.refresh(); //refresh del modello
+
+			var guid = oData.guid;
+
+			var oDataModel = that.getView().getModel("oData");
+			var sPath = "/checkDocumentazioneMancanteSet('" + guid + "')";
+			//var docMancante = that.getView().getModel("i18n").getResourceBundle().getText("DocMancante");
+			oDataModel.read(sPath, {
+				"success": function (oDataResults) {
+					that.getView().byId("stampDuty").setVisible(oDataResults.StampDutyDocReq);
+				}.bind(that),
+				"error": function (err) {
+					sap.m.MessageToast.show(err.message);
 				}
 
-				oDocUplModel.refresh();
-
-				var oModel = that.getView().getModel();
-				//	var listA = oModel.getProperty("/listA");
-
-				//controllo per il secondo input della data (relativo a Marca da bollo). per leggere correttamente i dati
-				var dataMB = oModel.getProperty("/stamp_duty_date"); //chiamo la variabile
-				dataMB = new Date(dataMB); //trasformazione da stringa ad oggetto
-				oModel.setProperty("/stamp_duty_date", dataMB); //set della propriety con la nuova variabile perchè non teneva in memoria il cambiamento
-				oModel.refresh(); //refresh del modello
-
-				var guid = oData.guid;
-
-				var oDataModel = that.getView().getModel("oData");
-				var sPath = "/checkDocumentazioneMancanteSet('" + guid + "')";
-				//var docMancante = that.getView().getModel("i18n").getResourceBundle().getText("DocMancante");
-				oDataModel.read(sPath, {
-					"success": function (oDataResults) {
-						that.getView().byId("stampDuty").setVisible(oDataResults.StampDutyDocReq);
-					}.bind(that),
-					"error": function (err) {
-						sap.m.MessageToast.show(err.message);
-					}
-
-				});
 			});
+			//	});
 		},
 
 		// ---------------------------------------------------------------------------------- Start funzioni generiche
