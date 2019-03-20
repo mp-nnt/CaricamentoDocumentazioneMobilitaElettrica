@@ -13,12 +13,12 @@ sap.ui.define([
 	return Controller.extend("pabz.me.CaricamentoDocumentazioneMobilitaElettrica.controller.View1", {
 
 		uploadJSON: {},
-		ArrayId: ["CartaIdentita", "Preventivi", "Dichiarazioni", "Pagamenti", "Altro"],
-		ArrayIdNew: ["CartaIdentitaNew", "PreventiviNew", "DichiarazioniNew", "PagamentiNew", "AltroNew"],
+		ArrayId: ["CartaIdentita", "Preventivi", "Dichiarazioni", "Pagamenti", "Altro"], //campi del modello con gli allegati già presenti nella domanda
+		ArrayIdNew: ["CartaIdentitaNew", "PreventiviNew", "DichiarazioniNew", "PagamentiNew", "AltroNew"], //campi del modello in cui vengono salvati i documenti caricati in questa app
 		onInit: function () {
 			this.getView().setModel(new JSONModel({
 				"items": []
-			}), "uploadedDocument"); //test
+			}), "uploadedDocument");
 
 			this.getView().setModel(new JSONModel({
 				"maximumFilenameLength": 80,
@@ -96,9 +96,9 @@ sap.ui.define([
 				}
 
 				oDocUplModel.refresh();
-				
+
 				var oModel = that.getView().getModel();
-			//	var listA = oModel.getProperty("/listA");
+				//	var listA = oModel.getProperty("/listA");
 
 				//controllo per il secondo input della data (relativo a Marca da bollo). per leggere correttamente i dati
 				var dataMB = oModel.getProperty("/stamp_duty_date"); //chiamo la variabile
